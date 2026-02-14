@@ -20,7 +20,7 @@ function App() {
       
       data.forEach(t => {
         if (t.type === 'Income') inc += Number(t.amount);
-        else exp += Number(t.amount);
+        if (t.type === 'Expense') exp += Number(t.amount);
       });
 
       setTotals({
@@ -29,13 +29,13 @@ function App() {
         balance: inc - exp
       });
     } catch (error) {
-      console.error("Error calculando totales:", error);
+      console.error("Error cargando totales:", error);
     }
   };
 
   useEffect(() => {
     calculateTotals();
-    const interval = setInterval(calculateTotals, 2000); // Se actualiza solo cada 2 segundos
+    const interval = setInterval(calculateTotals, 2000);
     return () => clearInterval(interval);
   }, []);
 

@@ -1,3 +1,20 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "id": "b5e3",
+      "description": "Salario",
+      "amount": 45999,
+      "type": "Income",
+      "category": "Depósito",
+      "date": "14/2/2026, 5:38:12 p.m."
+    },
+    {
+      "id": "82a8",
+      "description": "Compra de Comida",
+      "amount": 16000,
+      "type": "Expense",
+      "category": "Gasto",
+      "date": "14/2/2026, 5:38:30 p.m."
+    }
+  ]
 }
