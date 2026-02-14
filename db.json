@@ -1,0 +1,11 @@
+{
+  "transactions": [
+    {
+      "id": "dba4",
+      "description": "venta",
+      "amount": 10000,
+      "category": "Other",
+      "type": "Expense"
+    }
+  ]
+}
