@@ -1,18 +1,14 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 
 const SummaryCard = ({ title, amount, color }) => {
   return (
-    <Card sx={{ minWidth: 200, flexGrow: 1, borderRadius: 3, boxShadow: 3 }}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {title}
-        </Typography>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: color }}>
-          ${amount}
-        </Typography>
-      </CardContent>
-    </Card>
+    <Paper sx={{ p: 3, borderRadius: 4, bgcolor: '#1e293b', color: 'white', borderLeft: `6px solid ${color}` }}>
+      <Typography variant="body2" sx={{ color: '#94a3b8', fontWeight: 'bold' }}>{title}</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'baseline', mt: 1 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>${amount}</Typography>
+      </Box>
+    </Paper>
   );
 };
 

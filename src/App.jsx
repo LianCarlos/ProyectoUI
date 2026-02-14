@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import Sidebar from './components/Sidebar';
 import SummaryCard from './components/SummaryCard';
@@ -7,25 +7,59 @@ import TransactionList from './components/TransactionList';
 import ExpenseChart from './components/ExpenseChart';
 
 function App() {
-  // Este estado controla qué "página" vemos
   const [view, setView] = useState('dashboard');
+  const [totals, setTotals] = useState({ balance: 0, income: 0, expense: 0 });
+
+  const calculateTotals = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/transactions');
+      const data = await response.json();
+      
+      let inc = 0;
+      let exp = 0;
+      
+      data.forEach(t => {
+        if (t.type === 'Income') inc += Number(t.amount);
+        else exp += Number(t.amount);
+      });
+
+      setTotals({
+        income: inc,
+        expense: exp,
+        balance: inc - exp
+      });
+    } catch (error) {
+      console.error("Error calculando totales:", error);
+    }
+  };
+
+  useEffect(() => {
+    calculateTotals();
+    const interval = setInterval(calculateTotals, 2000); // Se actualiza solo cada 2 segundos
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <Box sx={{ display: 'flex', bgcolor: '#f4f7fe', minHeight: '100vh' }}>
-      {/* Le pasamos la función para cambiar de vista al Sidebar */}
+    <Box sx={{ display: 'flex', bgcolor: '#0f172a', minHeight: '100vh', color: '#f8fafc' }}>
       <Sidebar setView={setView} />
       
       <Box sx={{ flexGrow: 1, p: 4 }}>
         {view === 'dashboard' ? (
           <>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#1b2559' }}>
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#ffffff' }}>
               Dashboard Financiero
             </Typography>
 
             <Grid container spacing={3} sx={{ mb: 4 }}>
-              <Grid item xs={12} md={4}><SummaryCard title="Balance" amount="3,800" color="#4318ff" /></Grid>
-              <Grid item xs={12} md={4}><SummaryCard title="Ingresos" amount="5,200" color="#05cd99" /></Grid>
-              <Grid item xs={12} md={4}><SummaryCard title="Gastos" amount="1,400" color="#ee5d50" /></Grid>
+              <Grid item xs={12} md={4}>
+                <SummaryCard title="Balance Total" amount={totals.balance.toLocaleString()} color="#4318ff" />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <SummaryCard title="Ingresos" amount={totals.income.toLocaleString()} color="#05cd99" />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <SummaryCard title="Gastos" amount={totals.expense.toLocaleString()} color="#ee5d50" />
+              </Grid>
             </Grid>
 
             <Grid container spacing={3}>
@@ -39,8 +73,8 @@ function App() {
           </>
         ) : (
           <>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#1b2559' }}>
-              Todas las Transacciones
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold', color: '#ffffff' }}>
+              Historial de Transacciones
             </Typography>
             <TransactionList />
           </>
